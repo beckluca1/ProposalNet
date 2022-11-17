@@ -1,0 +1,123 @@
+﻿  Compiling CUDA source file kernel.cu...
+  Compiling CUDA source file NMath.cu...
+  Compiling CUDA source file NeuralNet\NeuralNet.cu...
+  Compiling CUDA source file main.cu...
+  Compiling CUDA source file DataLoader\ImageLoader.cu...
+  
+  C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include"  -G   --keep-dir x64\Debug  -maxrregcount=0  --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdx64\Debug\vc143.pdb /FS /Zi /RTC1 /MDd " -o C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\x64\Debug\kernel.cu.obj "C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\kernel.cu" 
+  
+  C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include"  -G   --keep-dir x64\Debug  -maxrregcount=0  --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdx64\Debug\vc143.pdb /FS /Zi /RTC1 /MDd " -o C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\x64\Debug\NMath.cu.obj "C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\NMath.cu" 
+  
+  C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include"  -G   --keep-dir x64\Debug  -maxrregcount=0  --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdx64\Debug\vc143.pdb /FS /Zi /RTC1 /MDd " -o C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\x64\Debug\NeuralNet.cu.obj "C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\NeuralNet\NeuralNet.cu" 
+  
+  C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include"  -G   --keep-dir x64\Debug  -maxrregcount=0  --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdx64\Debug\vc143.pdb /FS /Zi /RTC1 /MDd " -o C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\x64\Debug\ImageLoader.cu.obj "C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu" 
+  
+  C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include"  -G   --keep-dir x64\Debug  -maxrregcount=0  --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdx64\Debug\vc143.pdb /FS /Zi /RTC1 /MDd " -o C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\x64\Debug\main.cu.obj "C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\main.cu" 
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\stb_image.h(4207): warning #550-D: variable "old_limit" was set but never used
+  
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\stb_image.h(5121): warning #550-D: variable "idata_limit_old" was set but never used
+  
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\stb_image.h(6894): warning #550-D: variable "out_size" was set but never used
+  
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\stb_image.h(6895): warning #550-D: variable "delays_size" was set but never used
+  
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(196): warning #550-D: variable "width" was set but never used
+  
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(197): warning #550-D: variable "height" was set but never used
+  
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(649): warning #177-D: variable "pixelIndex" was declared but never referenced
+  
+  kernel.cu
+  NMath.cu
+  main.cu
+  NeuralNet.cu
+  ImageLoader.cu
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\main.cu(25): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "int", Datenverlust möglich
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\main.cu(107): warning C4244: "Initialisierung": Konvertierung von "unsigned __int64" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\NeuralNet\NeuralNet.cu(357): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "int", Datenverlust möglich
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\NeuralNet\NeuralNet.cu(460): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "int", Datenverlust möglich
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\NeuralNet\NeuralNet.cu(603): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "int", Datenverlust möglich
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\NeuralNet\NeuralNet.cu(743): warning C4267: "Argument": Konvertierung von "size_t" nach "int", Datenverlust möglich
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\NeuralNet\NeuralNet.cu(750): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "int", Datenverlust möglich
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\NeuralNet\NeuralNet.cu(867): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "int", Datenverlust möglich
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\NeuralNet\NeuralNet.cu(1155): warning C4267: "=": Konvertierung von "size_t" nach "int", Datenverlust möglich
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(245): warning C4244: "=": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(251): warning C4244: "=": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(257): warning C4244: "=": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(263): warning C4244: "=": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(288): warning C4244: "Initialisierung": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(289): warning C4244: "Initialisierung": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(296): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(296): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(296): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(296): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(355): warning C4244: "Initialisierung": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(356): warning C4244: "Initialisierung": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(370): warning C4244: "Argument": Konvertierung von "int" in "_Ty", möglicher Datenverlust
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(459): warning C4244: "Initialisierung": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(470): warning C4244: "Initialisierung": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(480): warning C4244: "Initialisierung": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(489): warning C4244: "Initialisierung": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(508): warning C4244: "Initialisierung": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(512): warning C4244: "Initialisierung": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(519): warning C4244: "Initialisierung": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(544): warning C4244: "Initialisierung": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(549): warning C4244: "Initialisierung": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(556): warning C4244: "Initialisierung": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(574): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(575): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(576): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(577): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(579): warning C4244: "=": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(580): warning C4244: "=": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(581): warning C4244: "=": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(582): warning C4244: "=": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(624): warning C4244: "Initialisierung": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(625): warning C4244: "Initialisierung": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(627): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(627): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(628): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(628): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(629): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(629): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(630): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(630): warning C4244: "Argument": Konvertierung von "int" in "float", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(632): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(632): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(632): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(632): warning C4244: "Argument": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(679): warning C4244: "Initialisierung": Konvertierung von "_Ty" in "int", möglicher Datenverlust
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(684): warning C4244: "Argument": Konvertierung von "_Ty" in "int", möglicher Datenverlust
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(750): warning C4244: "Initialisierung": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(751): warning C4244: "Initialisierung": Konvertierung von "float" in "int", möglicher Datenverlust
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(798): warning C4244: "=": Konvertierung von "_Ty" in "uint8_t", möglicher Datenverlust
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(799): warning C4244: "=": Konvertierung von "_Ty" in "uint8_t", möglicher Datenverlust
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(800): warning C4244: "=": Konvertierung von "_Ty" in "uint8_t", möglicher Datenverlust
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\Luca\Documents\ProposalNet\NeuralNetCuda\DataLoader\ImageLoader.cu(808): warning C4244: "=": Konvertierung von "float" in "uint8_t", möglicher Datenverlust
+     Bibliothek "C:\Users\Luca\Documents\ProposalNet\x64\Debug\NeuralNetCuda.lib" und Objekt "C:\Users\Luca\Documents\ProposalNet\x64\Debug\NeuralNetCuda.exp" werden erstellt.
+LINK : warning LNK4098: Standardbibliothek "LIBCMT" steht in Konflikt mit anderen Bibliotheken; /NODEFAULTLIB:Bibliothek verwenden.
+  NeuralNetCuda.vcxproj -> C:\Users\Luca\Documents\ProposalNet\x64\Debug\NeuralNetCuda.exe

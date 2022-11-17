@@ -24,6 +24,8 @@ int main()
 
     int boundingBoxCount = allBoundingBoxes.allBoundingBoxes.size();
 
+    cout << "Welcome to PRN" << endl;
+
     cout << "Found " << boundingBoxCount << " bounding boxes" << endl;
 
     vector<MapType> layerType = {Input, Convolutional, Pooling, Convolutional, Pooling, Convolutional, Pooling, Connected, Connected};
