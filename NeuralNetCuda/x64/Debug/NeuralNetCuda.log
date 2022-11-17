@@ -1,0 +1,7 @@
+﻿  Compiling CUDA source file main.cu...
+  
+  C:\Users\Luca\source\repos\NeuralNetCuda\NeuralNetCuda>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\include"  -G   --keep-dir x64\Debug  -maxrregcount=0  --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdx64\Debug\vc143.pdb /FS /Zi /RTC1 /MDd " -o C:\Users\Luca\source\repos\NeuralNetCuda\NeuralNetCuda\x64\Debug\main.cu.obj "C:\Users\Luca\source\repos\NeuralNetCuda\NeuralNetCuda\main.cu" 
+  main.cu
+C:\Users\Luca\source\repos\NeuralNetCuda\NeuralNetCuda\main.cu(25): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "int", Datenverlust möglich
+C:\Users\Luca\source\repos\NeuralNetCuda\NeuralNetCuda\main.cu(105): warning C4244: "Initialisierung": Konvertierung von "unsigned __int64" in "int", möglicher Datenverlust
+  NeuralNetCuda.vcxproj -> C:\Users\Luca\source\repos\NeuralNetCuda\x64\Debug\NeuralNetCuda.exe

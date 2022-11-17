@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="NeuralNet">
+      <UniqueIdentifier>{10d4ba73-2a04-4e3c-8746-892576f57087}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataLoader">
+      <UniqueIdentifier>{b752d60b-feec-491d-bca2-170c7386cf10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NMath">
+      <UniqueIdentifier>{82ec14d1-e300-4f12-9be7-e6053ec80d00}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NeuralNet\NeuralNet.cuh">
+      <Filter>NeuralNet</Filter>
+    </ClInclude>
+    <ClInclude Include="DataLoader\ImageLoader.cuh">
+      <Filter>DataLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="DataLoader\stb_image.h">
+      <Filter>DataLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="DataLoader\stb_image_write.h">
+      <Filter>DataLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="dirent.h" />
+    <ClInclude Include="header.cuh" />
+    <ClInclude Include="kernel.cuh" />
+    <ClInclude Include="main.cuh" />
+    <ClInclude Include="NMath.cuh">
+      <Filter>NMath</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="main.cu" />
+    <CudaCompile Include="NeuralNet\NeuralNet.cu">
+      <Filter>NeuralNet</Filter>
+    </CudaCompile>
+    <CudaCompile Include="DataLoader\ImageLoader.cu">
+      <Filter>DataLoader</Filter>
+    </CudaCompile>
+    <CudaCompile Include="NMath.cu">
+      <Filter>NMath</Filter>
+    </CudaCompile>
+  </ItemGroup>
+</Project>
