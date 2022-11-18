@@ -1,6 +1,8 @@
 #Executable Folder
 x64
 
+.vs
+
 # Prerequisites
 *.d
 
