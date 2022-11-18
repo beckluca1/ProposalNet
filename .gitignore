@@ -1,8 +1,6 @@
 #Executable Folder
 x64
 
-.vs
-
 # Prerequisites
 *.d
 
@@ -35,4 +33,4 @@ x64
 *.exe
 *.out
 *.app
-/.vs/ProposalNet/v17/Browse.VC.opendb
+/.vs
