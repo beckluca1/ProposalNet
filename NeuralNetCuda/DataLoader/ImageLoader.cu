@@ -193,12 +193,6 @@ Annotation::Annotation()
 
 void Annotation::loadAnnotation(string i_fileName)
 {
-    float width = 0;
-    float height = 0;
-
-    imageWidth = imageSize;
-    imageHeight = imageSize;
-
     fstream newfile;
 
     newfile.open(i_fileName,ios::in);
@@ -216,13 +210,13 @@ void Annotation::loadAnnotation(string i_fileName)
 
             if(words[0] == "width")
             {
-                width = stof(words[1]);
+                annotationWidth = stof(words[1]);
                 continue;
             }
             
             if(words[0] == "height")
             {
-                height = stof(words[1]);
+                annotationHeight = stof(words[1]);
                 continue;
             }
             
@@ -276,7 +270,6 @@ void Annotation::loadAnnotation(string i_fileName)
         newfile.close();
     }
 
-    //cout << "loaded annotation" << endl;
 }
 
 void Annotation::setTransformedAnnotation(vector<TrafficSign>* i_trafficSigns, int i_x, int i_y, int i_imageWidth, int i_imageHeight)
@@ -383,17 +376,29 @@ void Annotation::printAnnotation()
     }
 }
 
-Image::Image()
+Frame::Frame()
 {
 
 }
 
+Frame::Frame(int i_x, int i_y, int i_imageWidth, int i_imageHeight)
+{
+    x = i_x;
+    y = i_y;
+    imageWidth = i_imageWidth;
+    imageHeight = i_imageHeight;
+}
+
+Image::Image()
+{
+    imageSize = 0;
+}
+
 Image::Image(string i_path, int i_imageSize)
 {
-    imageSize = i_imageSize;
+    setImageSize(i_imageSize);
 
     string path = removeChracters(i_path, { '"' });
-    //cout << "Path: " << path << endl;
 
     vector<string> filePaths = splitString(path, "\\");
 
@@ -404,40 +409,45 @@ Image::Image(string i_path, int i_imageSize)
 
     fileName = filePaths[filePaths.size() - 1].substr(0, filePaths[filePaths.size() - 1].size() - 4);
 
-    //cout << "Source: " << sourcePath << ", Image name: " << fileName << endl;
-
-    string imagePath = sourcePath + "images\\" + fileName + ".jpg";
-
-    //cout << "Image path: " << imagePath << endl;
-
-    //cout << "Annotation path: " << sourcePath << "annotations\\" << fileName << ".json" << endl;
+    imagePath = sourcePath + "images\\" + fileName + ".jpg";
 
     loadAnnotation(sourcePath + "annotations\\" + fileName + ".json");
+    resizeAnnotation(i_imageSize);
 
     if(trafficSigns.size() == 0)
     {
-        cout << "No traffic signs found" << endl;
         return;
     }
-
-    loadImage(imagePath);
-    resizeImage(i_imageSize);
 }
 
-void Image::loadImage(string i_path)
+void Image::setImageSize(int i_imageSize)
 {
-    const char* pathChars = i_path.c_str();
+    imageWidth = i_imageSize;
+    imageHeight = i_imageSize;
+
+    imageSize = i_imageSize;
+}
+
+void Image::loadImage(int i_imageSize)
+{
+    const char* pathChars = imagePath.c_str();
 
     int bpp;
 
-    uint8_t* rgb_image = stbi_load(pathChars, &imageWidth, &imageHeight, &bpp, 3);
+    int rawWidth;
+    int rawHeight;
 
-    for(int y = 0; y < imageHeight; y ++)
+    uint8_t* rgb_image = stbi_load(pathChars, &rawWidth, &rawHeight, &bpp, 3);
+
+    float factorX = (float)rawWidth / (float)i_imageSize;
+    float factorY = (float)rawHeight / (float)i_imageSize;
+
+    for(int y = 0; y < i_imageSize; y ++)
     {
-        for(int x = 0; x < imageWidth; x ++)
+        for(int x = 0; x < i_imageSize; x ++)
         {
             unsigned bytePerPixel = 3;
-            unsigned char* pixelData = rgb_image + (x + imageWidth * y) * bytePerPixel;
+            unsigned char* pixelData = rgb_image + (int(x * factorX) + rawWidth * int(y * factorY)) * bytePerPixel;
 
             rChannel.push_back((float)pixelData[0] / 255.0f);
             gChannel.push_back((float)pixelData[1] / 255.0f);
@@ -454,122 +464,38 @@ void Image::resizeImage(int i_imageSize)
     vector<float> rawGChannel = gChannel;
     vector<float> rawBChannel = bChannel;
 
-    float ratioX = (float)imageWidth / (float)i_imageSize;
-
-    int gaussianKernelWidth = max(ratioX / 2, 1.0f);
-    int gaussianKernelSizeX = gaussianKernelWidth * 2 + 1;
-    float deviationX = max(((float)gaussianKernelWidth / 3.0f), 1.0f);
-    float sqrDeviationX = deviationX * deviationX;
-
-    vector<float> gaussianKernelX = vector<float>(gaussianKernelSizeX);
-
-    float sum = 0;
-    
-    for (int dX = -gaussianKernelWidth; dX < gaussianKernelWidth + 1; dX++)
-    {
-        float sqrDistance = dX * dX;
-        float gaussian = exp(-sqrDistance / (2.0f * sqrDeviationX)) / sqrt(2.0f * 3.142f * sqrDeviationX);
-        sum += gaussian;
-
-        int kernelIndex = dX + gaussianKernelWidth;
-        gaussianKernelX[kernelIndex] = gaussian;
-    }
-
-    float ratioY = (float)imageHeight / (float)i_imageSize;
-
-    int gaussianKernelHeight = max(ratioY / 2, 1.0f);
-    int gaussianKernelSizeY = gaussianKernelHeight * 2 + 1;
-    float deviationY = max(((float)gaussianKernelHeight / 3.0f), 1.0f);
-    float sqrDeviationY = deviationY * deviationY;
-
-    vector<float> gaussianKernelY = vector<float>(gaussianKernelSizeY);
-
-    for (int dY = -gaussianKernelHeight; dY < gaussianKernelHeight + 1; dY++)
-    {
-        float sqrDistance = dY * dY;
-        float gaussian = exp(-sqrDistance / (2.0f * sqrDeviationY)) / sqrt(2.0f * 3.142f * sqrDeviationY);
-        sum += gaussian;
-
-        int kernelIndex = dY + gaussianKernelHeight;
-        gaussianKernelY[kernelIndex] = gaussian;
-    }
-
-    rChannel = vector<float> (i_imageSize * imageHeight);
-    gChannel = vector<float> (i_imageSize * imageHeight);
-    bChannel = vector<float> (i_imageSize * imageHeight);
-
-    for(int y = 0; y < imageHeight; y ++)
-    {
-        for(int x = 0; x < i_imageSize; x ++)
-        {
-            int pixelIndex = x + i_imageSize * y;
-
-            float rawX = ratioX * x;
-            float rawY = y;
-
-            for (int dX = -gaussianKernelWidth; dX < gaussianKernelWidth + 1; dX++)
-            {
-                int convolutedX = rawX + dX;
-
-                if (convolutedX < 0 || convolutedX >= imageWidth)
-                {
-                    continue;
-                }
-
-                int convolutedIndex = convolutedX + imageWidth * rawY;
-
-                float factor = gaussianKernelX[dX + gaussianKernelWidth];
-                    
-                rChannel[pixelIndex] += rawRChannel[convolutedIndex] * factor;
-                gChannel[pixelIndex] += rawGChannel[convolutedIndex] * factor;
-                bChannel[pixelIndex] += rawBChannel[convolutedIndex] * factor;
-            }
-        }
-    }
-
-    rawRChannel = rChannel;
-    rawGChannel = gChannel;
-    rawBChannel = bChannel;
-
     rChannel = vector<float>(i_imageSize * i_imageSize);
     gChannel = vector<float>(i_imageSize * i_imageSize);
     bChannel = vector<float>(i_imageSize * i_imageSize);
+
+    float factorX = (float)imageWidth / (float)i_imageSize;
+    float factorY = (float)imageHeight / (float)i_imageSize;
 
     for (int y = 0; y < i_imageSize; y++)
     {
         for (int x = 0; x < i_imageSize; x++)
         {
-            int pixelIndex = x + i_imageSize * y;
+            int newIndex = x + i_imageSize * y;
+            int pixelIndex = int(x * factorX) + imageWidth * int(y * factorY);
 
-            float rawX = x;
-            float rawY = ratioY * y;
-
-            for (int dY = -gaussianKernelHeight; dY < gaussianKernelHeight + 1; dY++)
-            {
-                int convolutedY = rawY + dY;
-
-                if (convolutedY < 0 || convolutedY >= imageHeight)
-                {
-                    continue;
-                }
-
-                int convolutedIndex = rawX + i_imageSize * convolutedY;
-
-                float factor = gaussianKernelY[dY + gaussianKernelHeight];
-
-                rChannel[pixelIndex] += rawRChannel[convolutedIndex] * factor;
-                gChannel[pixelIndex] += rawGChannel[convolutedIndex] * factor;
-                bChannel[pixelIndex] += rawBChannel[convolutedIndex] * factor;
-            }
+            rChannel[newIndex] = rawRChannel[pixelIndex];
+            gChannel[newIndex] = rawGChannel[pixelIndex];
+            bChannel[newIndex] = rawBChannel[pixelIndex];
         }
     }
 
+    resizeAnnotation(i_imageSize);
+    setImageSize(i_imageSize);
+}
+
+void Image::resizeAnnotation(int i_imageSize)
+{
     for (int i = 0; i < trafficSigns.size(); i++)
     {
         TrafficSign* addedSign = &trafficSigns[i];
 
-        float factorX = (float)i_imageSize / (float)imageWidth;
-        float factorY = (float)i_imageSize / (float)imageHeight;
+        float factorX = (float)i_imageSize / (float)annotationWidth;
+        float factorY = (float)i_imageSize / (float)annotationHeight;
 
         float newMinX = clip((addedSign->minX) * factorX, 0, i_imageSize);
         float newMinY = clip((addedSign->minY) * factorY, 0, i_imageSize);
@@ -582,34 +508,32 @@ void Image::resizeImage(int i_imageSize)
         addedSign->maxY = newMaxY;
     }
 
-    imageWidth = i_imageSize;
-    imageHeight = i_imageSize;
-
-    imageSize = i_imageSize;
+    annotationWidth = i_imageSize;
+    annotationHeight = i_imageSize;
 }
 
-Image Image::getSubImage(int i_x, int i_y, int i_imageWidth, int i_imageHeight)
+Image Image::getSubImage(Frame i_frame)
 {
     Image outputImage;
 
-    if (i_x < 0 || i_x + i_imageWidth >= imageWidth || i_y < 0 || i_y + i_imageHeight >= imageWidth)
+    if (i_frame.x < 0 || i_frame.x + i_frame.imageWidth >= imageWidth || i_frame.y < 0 || i_frame.y + i_frame.imageHeight >= imageHeight)
     {
         cout << "Error reading coordinates" << endl;
-        cout << i_x << ", " << i_y << ", " << i_imageWidth << " / " << imageWidth << ", " << i_imageHeight << " / " << imageHeight << endl;
+        cout << i_frame.x << ", " << i_frame.y << ", " << i_frame.imageWidth << " / " << imageWidth << ", " << i_frame.imageHeight << " / " << imageHeight << endl;
 
         return outputImage;
     }
 
-    outputImage.rChannel = vector<float>(i_imageWidth * i_imageHeight);
-    outputImage.gChannel = vector<float>(i_imageWidth * i_imageHeight);
-    outputImage.bChannel = vector<float>(i_imageWidth * i_imageHeight);
+    outputImage.rChannel = vector<float>(i_frame.imageWidth * i_frame.imageHeight);
+    outputImage.gChannel = vector<float>(i_frame.imageWidth * i_frame.imageHeight);
+    outputImage.bChannel = vector<float>(i_frame.imageWidth * i_frame.imageHeight);
 
-    for (int y = 0; y < i_imageHeight; y++)
+    for (int y = 0; y < i_frame.imageHeight; y++)
     {
-        for (int x = 0; x < i_imageWidth; x++)
+        for (int x = 0; x < i_frame.imageWidth; x++)
         {
-            int pixelIndex = (x + i_x) + imageWidth * (y + i_y);
-            int outputIndex = x + i_imageWidth * y;
+            int pixelIndex = (x + i_frame.x) + imageWidth * (y + i_frame.y);
+            int outputIndex = x + i_frame.imageWidth * y;
 
             outputImage.rChannel[outputIndex] = rChannel[pixelIndex];
             outputImage.gChannel[outputIndex] = gChannel[pixelIndex];
@@ -621,13 +545,13 @@ Image Image::getSubImage(int i_x, int i_y, int i_imageWidth, int i_imageHeight)
     {
         TrafficSign* addedSign = &trafficSigns[i];
 
-        float factorX = imageWidth / i_imageWidth;
-        float factorY = imageHeight / i_imageHeight;
+        float factorX = imageWidth / i_frame.imageWidth;
+        float factorY = imageHeight / i_frame.imageHeight;
 
-        float newMinX = clip((addedSign->minX - i_x), 0, i_imageWidth);
-        float newMinY = clip((addedSign->minY - i_y), 0, i_imageHeight);
-        float newMaxX = clip((addedSign->maxX - i_x), 0, i_imageWidth);
-        float newMaxY = clip((addedSign->maxY - i_y), 0, i_imageHeight);
+        float newMinX = clip((addedSign->minX - i_frame.x), 0, i_frame.imageWidth);
+        float newMinY = clip((addedSign->minY - i_frame.y), 0, i_frame.imageHeight);
+        float newMaxX = clip((addedSign->maxX - i_frame.x), 0, i_frame.imageWidth);
+        float newMaxY = clip((addedSign->maxY - i_frame.y), 0, i_frame.imageHeight);
 
         outputImage.trafficSigns.push_back(TrafficSign(addedSign->label, newMinX, newMinY, newMaxX, newMaxY));
     }
@@ -635,10 +559,10 @@ Image Image::getSubImage(int i_x, int i_y, int i_imageWidth, int i_imageHeight)
     outputImage.sourcePath = sourcePath;
     outputImage.fileName = fileName;
 
-    outputImage.imageWidth = i_imageWidth;
-    outputImage.imageHeight = i_imageHeight;
+    outputImage.imageWidth = i_frame.imageWidth;
+    outputImage.imageHeight = i_frame.imageHeight;
 
-    outputImage.imageSize = i_imageWidth;
+    outputImage.imageSize = i_frame.imageWidth;
 
     int pixelOverlap = 0;
 
@@ -664,9 +588,72 @@ Image Image::getSubImage(int i_x, int i_y, int i_imageWidth, int i_imageHeight)
     return outputImage;
 }
 
-vector<Image> Image::getSubImages(vector<int> i_sizes, vector<float> i_ratios, int i_skipping)
+Frame Image::getSubImageFrame(int i_x, int i_y, int i_imageWidth, int i_imageHeight)
+{
+    Frame outputFrame = Frame(i_x, i_y, i_imageWidth, i_imageHeight);
+
+    if (i_x < 0 || i_x + i_imageWidth >= imageWidth || i_y < 0 || i_y + i_imageHeight >= imageWidth)
+    {
+        cout << "Error reading coordinates" << endl;
+        cout << i_x << ", " << i_y << ", " << i_imageWidth << " / " << imageWidth << ", " << i_imageHeight << " / " << imageHeight << endl;
+
+        return outputFrame;
+    }
+
+    float maxOverlap = 0;
+
+    vector<TrafficSign> signs;
+
+    for (int i = 0; i < trafficSigns.size(); i++)
+    {
+        TrafficSign* addedSign = &trafficSigns[i];
+
+        int unionX = max(addedSign->maxX, i_x + i_imageWidth) - min(i_x, addedSign->minX);
+        int unionY = max(addedSign->maxY, i_y + i_imageHeight) - min(i_y, addedSign->minY);
+        int unionArea = unionX * unionY;
+
+        int newMinX = clip((addedSign->minX - i_x), 0, i_imageWidth);
+        int newMinY = clip((addedSign->minY - i_y), 0, i_imageHeight);
+        int newMaxX = clip((addedSign->maxX - i_x), 0, i_imageWidth);
+        int newMaxY = clip((addedSign->maxY - i_y), 0, i_imageHeight);
+
+        int overlapX = min(addedSign->maxX, i_x + i_imageWidth) - max(addedSign->minX, i_x);
+        int overlapY = min(addedSign->maxY, i_y + i_imageHeight) - max(addedSign->minY, i_y);
+
+        if (overlapX <= 0 || overlapY <= 0)
+        {
+            continue;
+        }
+
+        float overlap = (float)(overlapX * overlapY) / (float)unionArea;
+
+        if (overlap <= maxOverlap)
+        {
+            continue;
+        }
+
+        maxOverlap = overlap;
+    }
+
+    outputFrame.percentage = maxOverlap;
+    
+    return outputFrame;
+}
+
+vector<Image> Image::getSubImages(vector<Frame> i_frames)
 {
     vector<Image> subImages;
+    for (int i = 0; i < i_frames.size(); i++)
+    {           
+        subImages.push_back(getSubImage(i_frames[i]));
+    }
+
+    return subImages;
+}
+
+vector<Frame> Image::getSubImageFrames(vector<int> i_sizes, vector<float> i_ratios, int i_skipping)
+{
+    vector<Frame> subFrames;
     for (int y = 0; y < imageHeight; y += i_skipping)
     {
         for (int x = 0; x < imageWidth; x += i_skipping)
@@ -681,13 +668,13 @@ vector<Image> Image::getSubImages(vector<int> i_sizes, vector<float> i_ratios, i
                     if (maxX >= imageWidth || maxY >= imageHeight)
                         continue;
 
-                    subImages.push_back(getSubImage(x, y, i_sizes[i], i_sizes[i] * i_ratios[j]));
+                    subFrames.push_back(getSubImageFrame(x, y, i_sizes[i], i_sizes[i] * i_ratios[j]));
                 }
             }
         }
     }
 
-    return subImages;
+    return subFrames;
 }
 
 vector<vector<float>*> Image::getImageData()
@@ -717,8 +704,6 @@ void Image::setOptimalResults(BoundingBoxStorage* i_allBoundingBoxes)
         optimalResults.push_back(&i_allBoundingBoxes->allBoundingBoxes[bestIndex]);
 
         trafficSigns[j].maxOverlap = bestRating;
-
-        //cout << "Optimal bounding box " << bestIndex << " iou: " << bestRating << endl;
     }
 }
 
@@ -741,8 +726,6 @@ void Image::setBestNetResults(vector<float>* i_results)
         }
     }
 
-    cout << "Best index " << bestIndex << ", confidence: " << bestResult << endl;
-
     for (int y = 0; y < imageSize; y++)
     {
         for (int x = 0; x < imageSize; x++)
@@ -756,35 +739,11 @@ void Image::setBestNetResults(vector<float>* i_results)
         }
     }
 
-    cout << "Pixel area " << pixelOutput.size() << endl;
-
 }
 
 
-void Image::printImage()
+void Image::printImage(int i_index)
 {
-    //cout << "Image: (width:" << imageWidth << ", height: " << imageHeight << ")" << endl;
-
-    /*for(int y = 0; y < imageSize; y ++)
-    {
-        for(int x = 0; x < imageSize; x ++)
-        {
-            int pixelIndex = x + imageSize * y;
-
-            float r = rChannel[pixelIndex];
-            float g = gChannel[pixelIndex];
-            float b = bChannel[pixelIndex];
-
-            int outputIndex = (int) (10.0f * (max(r, max(g, b)) + min( r, min(g, b))) / 2.0f);
-
-            vector<char> outputCharacters = {' ', '.', ':', '-', '=', '+', '*', '#', '%', '@'};
-
-            cout << outputCharacters[outputIndex];
-
-        }
-        cout << endl;
-    }*/
-
     uint8_t* pixels = new uint8_t[imageSize * imageSize * 3];
 
     int index = 0;
@@ -821,9 +780,9 @@ void Image::printImage()
         //pixels[i * 3 + 2] = (float)pixels[i * 3 + 2] * darknessFactor;
     }
 
-    string imagePath = sourcePath + "results\\" + fileName + ".jpg";
+    string outputPath = sourcePath + "results\\" + fileName + to_string(i_index) + ".jpg";
 
-    const char* pathChars = imagePath.c_str();
+    const char* pathChars = outputPath.c_str();
 
     stbi_write_jpg(pathChars, imageSize, imageSize, 3, pixels, 100);
 }

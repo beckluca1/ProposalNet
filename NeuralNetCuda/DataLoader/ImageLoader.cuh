@@ -55,6 +55,9 @@ class Annotation
         int imageWidth;
         int imageHeight;
 
+        int annotationWidth;
+        int annotationHeight;
+
         float objectPercentage;
 
         vector<TrafficSign> trafficSigns;
@@ -72,11 +75,26 @@ class Annotation
         void printAnnotation();
 };
 
+class Frame
+{
+    public:
+        int x;
+        int y;
+        int imageWidth;
+        int imageHeight;
+
+        float percentage;
+
+        Frame();
+        Frame(int i_x, int i_y, int i_imageWidth, int i_imageHeight);
+};
+
 class Image : public Annotation
 {
     public:
         string sourcePath;
         string fileName;
+        string imagePath;
 
         vector<float> rChannel;
         vector<float> gChannel;
@@ -90,19 +108,26 @@ class Image : public Annotation
         Image();
         Image(string i_path, int i_imageSize);
 
-        void loadImage(string i_path);
+        void loadImage(int i_imageSize);
 
         void resizeImage(int i_imageSize);
+        void resizeAnnotation(int i_imageSize);
 
-        Image getSubImage(int i_x, int i_y, int i_imageWidth, int i_imageHeight);
-        vector<Image> getSubImages(vector<int> i_sizes, vector<float> i_ratios, int i_skipping);
+        Image getSubImage(Frame i_frame);
+        vector<Image> getSubImages(vector<Frame> i_frames);
+
+        Frame getSubImageFrame(int i_x, int i_y, int i_imageWidth, int i_imageHeight);
+        vector<Frame> getSubImageFrames(vector<int> i_sizes, vector<float> i_ratios, int i_skipping);
+
 
         vector<vector<float>*> getImageData();
+
+        void setImageSize(int i_imageSize);
 
         void setOptimalResults(BoundingBoxStorage* i_allBoundingBoxes);
         void setBestNetResults(vector<float>* i_results);
 
-        void printImage();
+        void printImage(int i_index);
 };
 
 #endif

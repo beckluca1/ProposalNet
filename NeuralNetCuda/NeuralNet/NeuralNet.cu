@@ -1126,7 +1126,6 @@ void NeuralLayer::Update()
 {
     for(int i = 0; i < mapCount; i ++)
     {
-        //cout << "       Update map " << (i + 1) << " / " << mapCount << endl;
         mapPointer[i]->Update();
     }
 }
@@ -1135,7 +1134,6 @@ void NeuralLayer::CalculateChanges()
 {
     for(int i = 0; i < mapCount; i ++)
     {
-        //cout << "       Calculate map " << (i + 1) << " / " << mapCount << endl;
         mapPointer[i]->CalculateChanges();
     }
 }
@@ -1180,16 +1178,12 @@ void ConvolutionalNetwork::Correct(vector<float>* i_values)
 
 void ConvolutionalNetwork::Train(vector<vector<float>*> i_trainValues, vector<float>* i_correctvalues)
 {    
-    //cout << "Set net input" << endl;
     SetValues(i_trainValues);
 
-    //cout << "Update net" << endl;
     Update();
 
-    //cout << "Get correct output" << endl;
     Correct(i_correctvalues);
 
-    //cout << "Calculate net changes" << endl;
     CalculateChanges();
 }
 
@@ -1206,7 +1200,6 @@ void ConvolutionalNetwork::Update()
 {
     for(int i = 0; i < layerCount; i ++)
     {
-        //cout << "   Update layer " << (i + 1) << " / " << layerCount << endl;
         layers[i].Update();
     }
 }
@@ -1215,7 +1208,6 @@ void ConvolutionalNetwork::CalculateChanges()
 {
     for(int i = layerCount - 1; i >= 0; i --)
     {
-        //cout << "   Calculate layer " << (i + 1) << " / " << layerCount << endl;
         layers[i].CalculateChanges();
     }
 }

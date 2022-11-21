@@ -30,7 +30,7 @@ int main()
 
     vector<MapType> layerType = {Input, Convolutional, Pooling, Convolutional, Pooling, Convolutional, Pooling, Connected, Connected};
     vector<int> mapCount = {3, 8, 8, 16, 16, 32, 32, 1, 1};
-    vector<int> reduction = {128, 3, 2, 4, 2, 3, 2, 100, 2};
+    vector<int> reduction = {64, 3, 2, 4, 2, 3, 2, 100, 2};
 
     ConvolutionalNetwork net = ConvolutionalNetwork(layerType, mapCount, reduction);
 
@@ -66,73 +66,80 @@ int main()
         if(fileString[0] == '.')
             continue;
 
-        cout << "File: " << fileString << endl;
-
         string imagePath = path + "\\" + fileString;
-        //cout << imagePath << endl;
-
+        
         Image image = Image(imagePath, 1024);
 
         if(image.trafficSigns.size() == 0)
             continue;
 
-        vector<Image> subImages = image.getSubImages({ 64,128,256 }, { 1.0 }, 64);
+        vector<Frame> subFrames = image.getSubImageFrames({ 32,48,64,96,128 }, { 1.0 }, 8);
 
         int bestIndex = 0;
         float bestObjectPercentage = 0;
 
-        vector<Image> positiveSamples = vector<Image> ();
-        vector<Image> negativeSamples = vector<Image>();
-        for (int j = 0; j < subImages.size(); j++)
+        vector<Frame> positiveSamples = vector<Frame> ();
+        vector<Frame> negativeSamples = vector<Frame>();
+        for (int j = 0; j < subFrames.size(); j++)
         {
-            if (subImages[j].objectPercentage > bestObjectPercentage)
+            if (subFrames[j].percentage > bestObjectPercentage)
             {
                 bestIndex = j;
-                bestObjectPercentage = subImages[j].objectPercentage;
+                bestObjectPercentage = subFrames[j].percentage;
             }
 
-            if (subImages[j].objectPercentage > 0.3)
+            if (subFrames[j].percentage > 0.7)
             {
-                positiveSamples.push_back(subImages[j]);
+                positiveSamples.push_back(subFrames[j]);
 
             }
-            else if(subImages[j].objectPercentage == 0)
+            else if(subFrames[j].percentage == 0)
             {
-                negativeSamples.push_back(subImages[j]);
+                negativeSamples.push_back(subFrames[j]);
             }
         }
 
-        image = subImages[bestIndex];
-
         int sampleSize = min(positiveSamples.size(), negativeSamples.size());
+
+        if (sampleSize <= 0)
+        {
+            continue;
+        }
+
+        image.loadImage(1024);
 
         float correct = 0;
 
         for (int j = 0; j < sampleSize; j++)
-        {
+        {             
             int positiveIndex = rand() % positiveSamples.size();
+            Image positiveSample = image.getSubImage(positiveSamples[positiveIndex]);
+            positiveSample.resizeImage(64);
 
-            positiveSamples[positiveIndex].resizeImage(128);
-            vector<float> positiveObjectPercentage = { 1, 0 };// positiveSamples[positiveIndex]->objectPercentage};
-            net.Train(positiveSamples[positiveIndex].getImageData(), &positiveObjectPercentage);
+            //positiveSample.printImage(j);
+
+            vector<float> positiveObjectPercentage = { 1, 0 };
+            net.Train(positiveSample.getImageData(), &positiveObjectPercentage);
+            
+            //cout << (*net.GetValues(net.layerCount - 1)[0])[0] << ", " << (*net.GetValues(net.layerCount - 1)[0])[1] << endl;
 
             vector<vector<float>*> inputNet = net.layers[0].GetValues();
-            //cout << "Positive test: " << (*net.GetValues(net.layerCount - 1)[0])[0] << ", " << (*net.GetValues(net.layerCount - 1)[0])[1] << " / " << positiveSamples[positiveIndex].objectPercentage << endl;
 
-            correct += 1 - (*net.GetValues(net.layerCount - 1)[0])[0] + (*net.GetValues(net.layerCount - 1)[0])[1];
+            correct += pow(1 - (*net.GetValues(net.layerCount - 1)[0])[0],2) + pow((*net.GetValues(net.layerCount - 1)[0])[1],2);
 
             positiveSamples.erase(positiveSamples.begin() + positiveIndex);
 
 
             int negativeIndex = rand() % negativeSamples.size();
+            Image negativeSample = image.getSubImage(negativeSamples[negativeIndex]);
+            negativeSample.resizeImage(64);
 
-            negativeSamples[negativeIndex].resizeImage(128);
             vector<float> negativeObjectPercentage = { 0, 1 };
-            net.Train(negativeSamples[negativeIndex].getImageData(), &negativeObjectPercentage);
+            net.Train(negativeSample.getImageData(), &negativeObjectPercentage);
 
-            //cout << "Negative test: " << (*net.GetValues(net.layerCount - 1)[0])[0] << ", " << (*net.GetValues(net.layerCount - 1)[0])[1] << " / " << negativeSamples[negativeIndex].objectPercentage << endl;
+            //cout << (*net.GetValues(net.layerCount - 1)[0])[0] << ", " << (*net.GetValues(net.layerCount - 1)[0])[1] << endl;
 
-            correct += 1 - (*net.GetValues(net.layerCount - 1)[0])[1] + (*net.GetValues(net.layerCount - 1)[0])[0];
+            correct += pow(1 - (*net.GetValues(net.layerCount - 1)[0])[1],2) + pow((*net.GetValues(net.layerCount - 1)[0])[0],2);
 
 
             negativeSamples.erase(negativeSamples.begin() + negativeIndex);
@@ -148,26 +155,12 @@ int main()
 
         }
 
-        image.resizeImage(128);
-
-        //cout << "Get image data" << endl;
-
-
-        //cout << "Rate bounding boxes" << endl;
+        //image.resizeImage(128);
+        //image.printImage(-1);
 
         image.setOptimalResults(&allBoundingBoxes);
             
-        //cout << "Train net" << endl;
-
         vector<float>* netOutput = net.GetValues(net.layerCount - 1)[0];
-        //image.setBestNetResults(netOutput);
-
-        //cout << "Improve net" << endl;
-
-        if(image.objectPercentage > 0.3)
-        {
-            image.printImage();
-        }
     }
 
     return 0;
